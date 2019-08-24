@@ -15,13 +15,8 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
+import nl.openweb.quarkus.samples.petclinic.visit.Visit;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,12 +26,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
-import org.springframework.format.annotation.DateTimeFormat;
-import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
-import nl.openweb.quarkus.samples.petclinic.visit.Visit;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Simple business object representing a pet.
@@ -50,7 +46,6 @@ import nl.openweb.quarkus.samples.petclinic.visit.Visit;
 public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @ManyToOne
@@ -101,14 +96,11 @@ public class Pet extends NamedEntity {
 
     public List<Visit> getVisits() {
         List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-        PropertyComparator.sort(sortedVisits,
-                new MutableSortDefinition("date", false, false));
         return Collections.unmodifiableList(sortedVisits);
     }
 
     public void addVisit(Visit visit) {
         getVisitsInternal().add(visit);
-        visit.setPetId(this.getId());
+        visit.setPetId(this.id.intValue());
     }
-
 }

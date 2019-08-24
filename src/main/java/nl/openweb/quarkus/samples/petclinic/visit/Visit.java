@@ -15,15 +15,13 @@
  */
 package nl.openweb.quarkus.samples.petclinic.visit;
 
-import java.time.LocalDate;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-
-import nl.openweb.quarkus.samples.petclinic.model.BaseEntity;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -33,10 +31,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "visits")
-public class Visit extends BaseEntity {
+public class Visit extends PanacheEntity {
 
     @Column(name = "visit_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     @NotEmpty
@@ -76,5 +73,4 @@ public class Visit extends BaseEntity {
     public void setPetId(Integer petId) {
         this.petId = petId;
     }
-
 }

@@ -15,11 +15,7 @@
  */
 package nl.openweb.quarkus.samples.petclinic.vet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import nl.openweb.quarkus.samples.petclinic.model.Person;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,10 +24,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
-import nl.openweb.quarkus.samples.petclinic.model.Person;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Simple JavaBean domain object representing a veterinarian.
@@ -63,8 +60,6 @@ public class Vet extends Person {
     @XmlElement
     public List<Specialty> getSpecialties() {
         List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
-        PropertyComparator.sort(sortedSpecs,
-                new MutableSortDefinition("name", true, true));
         return Collections.unmodifiableList(sortedSpecs);
     }
 
@@ -75,5 +70,4 @@ public class Vet extends Person {
     public void addSpecialty(Specialty specialty) {
         getSpecialtiesInternal().add(specialty);
     }
-
 }

@@ -29,12 +29,6 @@ import javax.ws.rs.core.MediaType;
 @Path("/")
 class VetController {
 
-    private final VetRepository vetRepository;
-
-    public VetController(VetRepository clinicService) {
-        this.vetRepository = clinicService;
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/vets")
@@ -42,8 +36,7 @@ class VetController {
         // Here we are returning an object of type 'Vets' rather than a collection of Vet
         // objects so it is simpler for JSon/Object mapping
         Vets vets = new Vets();
-        vets.getVetList().addAll(this.vetRepository.findAll());
+        vets.getVetList().addAll(Vet.listAll());
         return vets;
     }
-
 }

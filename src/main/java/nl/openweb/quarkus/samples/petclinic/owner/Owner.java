@@ -15,11 +15,7 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import nl.openweb.quarkus.samples.petclinic.model.Person;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,11 +24,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
-
-import nl.openweb.quarkus.samples.petclinic.model.Person;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
-import org.springframework.core.style.ToStringCreator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Simple JavaBean domain object representing an owner.
@@ -98,13 +94,11 @@ public class Owner extends Person {
 
     public List<Pet> getPets() {
         List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
-        PropertyComparator.sort(sortedPets,
-                new MutableSortDefinition("name", true, true));
         return Collections.unmodifiableList(sortedPets);
     }
 
     public void addPet(Pet pet) {
-        if (pet.isNew()) {
+        if (pet.id == null) {
             getPetsInternal().add(pet);
         }
         pet.setOwner(this);
@@ -129,7 +123,7 @@ public class Owner extends Person {
     public Pet getPet(String name, boolean ignoreNew) {
         name = name.toLowerCase();
         for (Pet pet : getPetsInternal()) {
-            if (!ignoreNew || !pet.isNew()) {
+            if (!ignoreNew || pet.id != null) {
                 String compName = pet.getName();
                 compName = compName.toLowerCase();
                 if (compName.equals(name)) {
@@ -142,11 +136,11 @@ public class Owner extends Person {
 
     @Override
     public String toString() {
-        return new ToStringCreator(this)
-
-                .append("id", this.getId()).append("new", this.isNew())
-                .append("lastName", this.getLastName())
-                .append("firstName", this.getFirstName()).append("address", this.address)
-                .append("city", this.city).append("telephone", this.telephone).toString();
+        return "Owner{" +
+            "address='" + address + '\'' +
+            ", city='" + city + '\'' +
+            ", telephone='" + telephone + '\'' +
+            ", pets=" + pets +
+            '}';
     }
 }
