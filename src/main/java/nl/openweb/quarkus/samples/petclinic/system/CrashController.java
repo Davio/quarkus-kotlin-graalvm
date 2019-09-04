@@ -26,10 +26,10 @@ import javax.ws.rs.Path;
  * Also see how a view that resolves to "error" has been added ("error.html").
  */
 @Path("/")
-class CrashController {
+public class CrashController {
 
     @GET
-    @Path("/oups")
+    @Path("/oops")
     public String triggerException() {
         throw new IllegalStateException("Expected: controller used to showcase what "
             + "happens when an exception is thrown");

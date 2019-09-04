@@ -24,10 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -81,27 +77,12 @@ public class Owner extends Person {
         this.telephone = telephone;
     }
 
-    protected Set<Pet> getPetsInternal() {
-        if (this.pets == null) {
-            this.pets = new HashSet<>();
-        }
-        return this.pets;
+    public Set<Pet> getPets() {
+        return pets;
     }
 
-    protected void setPetsInternal(Set<Pet> pets) {
+    public void setPets(Set<Pet> pets) {
         this.pets = pets;
-    }
-
-    public List<Pet> getPets() {
-        List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
-        return Collections.unmodifiableList(sortedPets);
-    }
-
-    public void addPet(Pet pet) {
-        if (pet.id == null) {
-            getPetsInternal().add(pet);
-        }
-        pet.setOwner(this);
     }
 
     /**
@@ -122,7 +103,7 @@ public class Owner extends Person {
      */
     public Pet getPet(String name, boolean ignoreNew) {
         name = name.toLowerCase();
-        for (Pet pet : getPetsInternal()) {
+        for (Pet pet : pets) {
             if (!ignoreNew || pet.id != null) {
                 String compName = pet.getName();
                 compName = compName.toLowerCase();

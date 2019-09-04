@@ -1,9 +1,19 @@
-mysql:
-  image: mysql:5.7
-  ports:
-    - "3306:3306"
-  environment:
-    - MYSQL_ROOT_PASSWORD=petclinic
-    - MYSQL_DATABASE=petclinic
-  volumes:
-    - "./conf.d:/etc/mysql/conf.d:ro"
+version: "3"
+
+services:
+  frontend:
+    image: sys2.open-web.nl:5443/petclinic-angular:latest
+    ports:
+      - "28080:80"
+  db:
+    image: "postgres:11.5-alpine"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: petshop
+      POSTGRES_USER: petshop
+      POSTGRES_PASSWORD: petshop
+    volumes:
+      - petshop_data:/var/lib/postgresql/data
+volumes:
+  petshop_data:

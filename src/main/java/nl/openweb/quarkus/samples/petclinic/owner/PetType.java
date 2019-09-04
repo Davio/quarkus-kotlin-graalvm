@@ -15,17 +15,19 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
 
-/**
- * @author Juergen Hoeller
- *         Can be Cat, Dog, Hamster...
- */
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.Set;
+
 @Entity
 @Table(name = "types")
 public class PetType extends NamedEntity {
 
+    @JsonbTransient
+    @OneToMany(mappedBy = "type")
+    private Set<Pet> pets;
 }

@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/")
-class WelcomeController {
+public class WelcomeController {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)

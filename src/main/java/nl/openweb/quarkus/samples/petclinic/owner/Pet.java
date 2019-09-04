@@ -18,6 +18,8 @@ package nl.openweb.quarkus.samples.petclinic.owner;
 import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
 import nl.openweb.quarkus.samples.petclinic.visit.Visit;
 
+import javax.json.bind.annotation.JsonbDateFormat;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,11 +29,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,12 +44,14 @@ import java.util.Set;
 public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
+    @JsonbDateFormat("yyyy/MM/dd")
     private LocalDate birthDate;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
     private PetType type;
 
+    @JsonbTransient
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
@@ -83,24 +83,12 @@ public class Pet extends NamedEntity {
         this.owner = owner;
     }
 
-    protected Set<Visit> getVisitsInternal() {
-        if (this.visits == null) {
-            this.visits = new HashSet<>();
-        }
-        return this.visits;
-    }
-
-    protected void setVisitsInternal(Set<Visit> visits) {
-        this.visits = visits;
-    }
-
-    public List<Visit> getVisits() {
-        List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
-        return Collections.unmodifiableList(sortedVisits);
+    public Set<Visit> getVisits() {
+        return visits;
     }
 
     public void addVisit(Visit visit) {
-        getVisitsInternal().add(visit);
+        visits.add(visit);
         visit.setPetId(this.id.intValue());
     }
 }

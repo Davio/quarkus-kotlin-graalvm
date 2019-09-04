@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.openweb.quarkus.samples.petclinic.vet;
+package nl.openweb.quarkus.samples.petclinic.owner;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -25,30 +25,33 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/vets")
+@Path("/owners")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class VetController {
+public class OwnerController {
 
     @GET
-    public List<Vet> getVets() {
-        return Vet.listAll();
+    public List<Owner> getOwners() {
+        return Owner.listAll();
     }
 
     @GET
     @Path("{id}")
-    public Vet getVetById(@PathParam("id") long id) {
-        return Vet.findById(id);
+    public Owner getOwnerById(@PathParam("id") long id) {
+        return Owner.findById(id);
     }
 
     @PUT
     @Path("{id}")
     @Transactional
-    public Vet updateVet(@PathParam("id") long id, Vet vet) {
-        Vet entity = Vet.findById(id);
-        entity.setFirstName(vet.getFirstName());
-        entity.setLastName(vet.getLastName());
-        entity.setSpecialties(vet.getSpecialties());
+    public Owner updateOwner(@PathParam("id") long id, Owner owner) {
+        Owner entity = Owner.findById(id);
+        entity.setFirstName(owner.getFirstName());
+        entity.setLastName(owner.getLastName());
+        entity.setAddress(owner.getAddress());
+        entity.setCity(owner.getCity());
+        entity.setTelephone(owner.getTelephone());
+        entity.setPets(owner.getPets());
         return entity;
     }
 }

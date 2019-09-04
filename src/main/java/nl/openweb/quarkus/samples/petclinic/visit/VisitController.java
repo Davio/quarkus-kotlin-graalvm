@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.openweb.quarkus.samples.petclinic.vet;
+package nl.openweb.quarkus.samples.petclinic.visit;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-/**
- * Simple domain object representing a list of veterinarians.
- *
- * @author Arjen Poutsma
- */
-@XmlRootElement
-public class Vets {
+import static io.quarkus.hibernate.orm.panache.PanacheEntityBase.listAll;
 
-    private List<Vet> vets;
+@Path("/")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class VisitController {
 
-    @XmlElement
-    public List<Vet> getVetList() {
-        if (vets == null) {
-            vets = new ArrayList<>();
-        }
-        return vets;
+    @Path("/visits")
+    @GET
+    public List<Visit> getVisits() {
+        return listAll();
     }
-
 }

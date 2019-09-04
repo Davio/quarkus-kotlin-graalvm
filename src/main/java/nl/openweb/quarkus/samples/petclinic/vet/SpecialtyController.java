@@ -25,30 +25,28 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/vets")
+@Path("/specialties")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class VetController {
+public class SpecialtyController {
 
     @GET
-    public List<Vet> getVets() {
-        return Vet.listAll();
+    public List<Specialty> getSpecialties() {
+        return Specialty.listAll();
     }
 
     @GET
     @Path("{id}")
-    public Vet getVetById(@PathParam("id") long id) {
-        return Vet.findById(id);
+    public Specialty getSpecialtyById(@PathParam("id") long id) {
+        return Specialty.findById(id);
     }
 
     @PUT
     @Path("{id}")
     @Transactional
-    public Vet updateVet(@PathParam("id") long id, Vet vet) {
-        Vet entity = Vet.findById(id);
-        entity.setFirstName(vet.getFirstName());
-        entity.setLastName(vet.getLastName());
-        entity.setSpecialties(vet.getSpecialties());
+    public Specialty updateSpecialty(@PathParam("id") long id, Specialty specialty) {
+        Specialty entity = Specialty.findById(id);
+        entity.setName(specialty.getName());
         return entity;
     }
 }

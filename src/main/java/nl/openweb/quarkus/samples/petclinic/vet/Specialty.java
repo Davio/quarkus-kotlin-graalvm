@@ -15,20 +15,20 @@
  */
 package nl.openweb.quarkus.samples.petclinic.vet;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
 
-/**
- * Models a {@link Vet Vet's} specialty (for example, dentistry).
- *
- * @author Juergen Hoeller
- */
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "specialties")
-public class Specialty extends NamedEntity implements Serializable {
+public class Specialty extends NamedEntity {
 
+    @JsonbTransient
+    @ManyToMany(mappedBy = "specialties")
+    private Set<Vet> vets = new HashSet<>();
 }
