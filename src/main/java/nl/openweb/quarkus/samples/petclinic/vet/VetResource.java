@@ -15,40 +15,45 @@
  */
 package nl.openweb.quarkus.samples.petclinic.vet;
 
+import nl.openweb.quarkus.samples.petclinic.Resource;
+
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/vets")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class VetController {
+public class VetResource implements Resource<Vet> {
 
-    @GET
-    public List<Vet> getVets() {
+    @Override
+    public List<Vet> getAll() {
         return Vet.listAll();
     }
 
-    @GET
-    @Path("{id}")
-    public Vet getVetById(@PathParam("id") long id) {
+    @Override
+    public Vet getById(long id) {
         return Vet.findById(id);
     }
 
-    @PUT
-    @Path("{id}")
     @Transactional
-    public Vet updateVet(@PathParam("id") long id, Vet vet) {
+    @Override
+    public Vet create(Vet restEntity) {
+        restEntity.persist();
+        return restEntity;
+    }
+
+    @Transactional
+    @Override
+    public Vet update(long id, Vet vet) {
         Vet entity = Vet.findById(id);
         entity.setFirstName(vet.getFirstName());
         entity.setLastName(vet.getLastName());
         entity.setSpecialties(vet.getSpecialties());
         return entity;
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        Vet.findById(id).delete();
     }
 }

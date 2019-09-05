@@ -15,13 +15,22 @@
  */
 package nl.openweb.quarkus.samples.petclinic.visit;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import nl.openweb.quarkus.samples.petclinic.owner.Pet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -31,8 +40,13 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "visits")
-public class Visit extends PanacheEntity {
+public class Visit extends PanacheEntityBase {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
     @Column(name = "visit_date")
     private LocalDate date;
 
@@ -40,8 +54,9 @@ public class Visit extends PanacheEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "pet_id")
-    private Integer petId;
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    public Pet pet;
 
     /**
      * Creates a new instance of Visit for the current date
@@ -66,11 +81,16 @@ public class Visit extends PanacheEntity {
         this.description = description;
     }
 
-    public Integer getPetId() {
-        return this.petId;
+    public Pet getPet() {
+        return pet;
     }
 
-    public void setPetId(Integer petId) {
-        this.petId = petId;
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    @JsonProperty("pet")
+    private void unpackNested(Map<String,Object> visit) {
+        this.pet = Pet.findById((int) visit.get("id"));
     }
 }

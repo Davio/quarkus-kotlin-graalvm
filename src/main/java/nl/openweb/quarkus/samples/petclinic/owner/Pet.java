@@ -15,11 +15,12 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
 import nl.openweb.quarkus.samples.petclinic.visit.Visit;
 
-import javax.json.bind.annotation.JsonbDateFormat;
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -44,19 +46,19 @@ import java.util.Set;
 public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
-    @JsonbDateFormat("yyyy/MM/dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
     private LocalDate birthDate;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
     private PetType type;
 
-    @JsonbTransient
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "petId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
     private Set<Visit> visits = new LinkedHashSet<>();
 
     public void setBirthDate(LocalDate birthDate) {
@@ -83,12 +85,13 @@ public class Pet extends NamedEntity {
         this.owner = owner;
     }
 
-    public Set<Visit> getVisits() {
-        return visits;
+    @JsonProperty("owner")
+    private void unpackNested(Map<String,Object> owner) {
+        long ownerId = (int) (owner.get("id"));
+        this.owner = Owner.findById(ownerId);
     }
 
-    public void addVisit(Visit visit) {
-        visits.add(visit);
-        visit.setPetId(this.id.intValue());
+    public Set<Visit> getVisits() {
+        return visits;
     }
 }

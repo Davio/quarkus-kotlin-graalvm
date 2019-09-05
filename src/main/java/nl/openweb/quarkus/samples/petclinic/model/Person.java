@@ -15,9 +15,12 @@
  */
 package nl.openweb.quarkus.samples.petclinic.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
 
@@ -27,7 +30,11 @@ import javax.validation.constraints.NotEmpty;
  * @author Ken Krebs
  */
 @MappedSuperclass
-public class Person extends PanacheEntity {
+public class Person extends PanacheEntityBase {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
 
     @Column(name = "first_name")
     @NotEmpty

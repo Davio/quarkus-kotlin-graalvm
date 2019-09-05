@@ -15,38 +15,43 @@
  */
 package nl.openweb.quarkus.samples.petclinic.vet;
 
+import nl.openweb.quarkus.samples.petclinic.Resource;
+
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/specialties")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class SpecialtyController {
+public class SpecialtyResource implements Resource<Specialty> {
 
-    @GET
-    public List<Specialty> getSpecialties() {
+    @Override
+    public List<Specialty> getAll() {
         return Specialty.listAll();
     }
 
-    @GET
-    @Path("{id}")
-    public Specialty getSpecialtyById(@PathParam("id") long id) {
+    @Override
+    public Specialty getById(long id) {
         return Specialty.findById(id);
     }
 
-    @PUT
-    @Path("{id}")
     @Transactional
-    public Specialty updateSpecialty(@PathParam("id") long id, Specialty specialty) {
+    @Override
+    public Specialty create(Specialty restEntity) {
+        restEntity.persist();
+        return restEntity;
+    }
+
+    @Transactional
+    @Override
+    public Specialty update(long id, Specialty specialty) {
         Specialty entity = Specialty.findById(id);
         entity.setName(specialty.getName());
         return entity;
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        Specialty.findById(id).delete();
     }
 }

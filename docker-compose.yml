@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.native
+    image: sys2.open-web.nl:5443/quarkus-petclinic:latest
+    ports:
+      - "9966:9966"
   frontend:
     image: sys2.open-web.nl:5443/petclinic-angular:latest
     ports:

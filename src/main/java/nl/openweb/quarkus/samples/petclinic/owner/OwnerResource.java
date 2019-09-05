@@ -15,36 +15,35 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
+import nl.openweb.quarkus.samples.petclinic.Resource;
+
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/owners")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class OwnerController {
+public class OwnerResource implements Resource<Owner> {
 
-    @GET
-    public List<Owner> getOwners() {
+    @Override
+    public List<Owner> getAll() {
         return Owner.listAll();
     }
 
-    @GET
-    @Path("{id}")
-    public Owner getOwnerById(@PathParam("id") long id) {
+    @Override
+    public Owner getById(long id) {
         return Owner.findById(id);
     }
 
-    @PUT
-    @Path("{id}")
     @Transactional
-    public Owner updateOwner(@PathParam("id") long id, Owner owner) {
+    @Override
+    public Owner create(Owner restEntity) {
+        restEntity.persist();
+        return restEntity;
+    }
+
+    @Transactional
+    @Override
+    public Owner update(long id, Owner owner) {
         Owner entity = Owner.findById(id);
         entity.setFirstName(owner.getFirstName());
         entity.setLastName(owner.getLastName());
@@ -53,5 +52,11 @@ public class OwnerController {
         entity.setTelephone(owner.getTelephone());
         entity.setPets(owner.getPets());
         return entity;
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        Owner.findById(id).delete();
     }
 }

@@ -15,40 +15,43 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
+import nl.openweb.quarkus.samples.petclinic.Resource;
+
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/pets")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class PetController {
+@Path("/pettypes")
+public class PetTypeResource implements Resource<PetType> {
 
-    @GET
-    public List<Pet> getPets() {
-        return Pet.listAll();
+    @Override
+    public List<PetType> getAll() {
+        return PetType.listAll();
     }
 
-    @GET
-    @Path("{id}")
-    public Pet getPetById(@PathParam("id") long id) {
-        return Pet.findById(id);
+    @Override
+    public PetType getById(long id) {
+        return PetType.findById(id);
     }
 
-    @PUT
-    @Path("{id}")
     @Transactional
-    public Pet updatePet(@PathParam("id") long id, Pet pet) {
-        Pet entity = Pet.findById(id);
+    @Override
+    public PetType create(PetType restEntity) {
+        restEntity.persist();
+        return restEntity;
+    }
+
+    @Transactional
+    @Override
+    public PetType update(long id, PetType pet) {
+        PetType entity = PetType.findById(id);
         entity.setName(pet.getName());
-        entity.setBirthDate(pet.getBirthDate());
-        entity.setType(pet.getType());
         return entity;
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        PetType.findById(id).delete();
     }
 }

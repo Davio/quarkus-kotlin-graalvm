@@ -15,9 +15,9 @@
  */
 package nl.openweb.quarkus.samples.petclinic.owner;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nl.openweb.quarkus.samples.petclinic.model.NamedEntity;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,7 +27,7 @@ import java.util.Set;
 @Table(name = "types")
 public class PetType extends NamedEntity {
 
-    @JsonbTransient
+    @JsonIgnore
     @OneToMany(mappedBy = "type")
     private Set<Pet> pets;
 }
