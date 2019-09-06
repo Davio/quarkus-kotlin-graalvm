@@ -8,6 +8,7 @@ services:
     image: sys2.open-web.nl:5443/quarkus-petclinic:latest
     ports:
       - "9966:9966"
+    restart: on-failure
   frontend:
     image: sys2.open-web.nl:5443/petclinic-angular:latest
     ports:
