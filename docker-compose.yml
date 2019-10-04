@@ -1,27 +1,24 @@
 version: "3"
 
 services:
-  backend:
+  app:
     build:
       context: .
       dockerfile: Dockerfile.native
-    image: sys2.open-web.nl:5443/quarkus-petclinic:latest
     ports:
-      - "9966:9966"
+      - "8080:8080"
     restart: on-failure
-  frontend:
-    image: sys2.open-web.nl:5443/petclinic-angular:latest
-    ports:
-      - "28080:80"
+    depends_on:
+      - db
   db:
     image: "postgres:11.5-alpine"
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: petshop
-      POSTGRES_USER: petshop
-      POSTGRES_PASSWORD: petshop
+      POSTGRES_DB: quarkus
+      POSTGRES_USER: quarkus
+      POSTGRES_PASSWORD: quarkus
     volumes:
-      - petshop_data:/var/lib/postgresql/data
+      - quarkus_data:/var/lib/postgresql/data
 volumes:
-  petshop_data:
+  quarkus_data:
