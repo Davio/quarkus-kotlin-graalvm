@@ -23,14 +23,10 @@ import javax.ws.rs.Path
 class MovieResource(
         @Inject
         private val movieRepository: MovieRepository
-) : Resource<Movie> {
-
-    override fun getAll(): List<Movie> = movieRepository.listAll()
-
-    override fun getById(id: Long): Movie = movieRepository.findById(id)
+) : Resource<Movie>(movieRepository) {
 
     @Transactional
-    override fun create(restEntity: Movie) = restEntity.apply { movieRepository.persist(this) }
+    override fun create(restEntity: Movie) = super.create(restEntity)
 
     @Transactional
     override fun update(id: Long, restEntity: Movie): Movie {
@@ -42,5 +38,5 @@ class MovieResource(
     }
 
     @Transactional
-    override fun delete(id: Long) = getById(id).run { movieRepository.delete(this) }
+    override fun delete(id: Long) = super.delete(id)
 }

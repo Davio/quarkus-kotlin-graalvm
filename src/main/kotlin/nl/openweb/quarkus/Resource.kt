@@ -1,5 +1,6 @@
 package nl.openweb.quarkus
 
+import io.quarkus.hibernate.orm.panache.PanacheRepository
 import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
@@ -12,25 +13,26 @@ import javax.ws.rs.core.MediaType
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-interface Resource<T> {
-
+abstract class Resource<T>(
+   private val repository: PanacheRepository<T>
+) {
     @GET
     @Path("")
-    fun getAll(): List<T>
+    fun getAll(): List<T> = repository.listAll()
 
     @GET
     @Path("{id}")
-    fun getById(@PathParam("id") id: Long): T
+    fun getById(@PathParam("id") id: Long): T = repository.findById(id)
 
     @POST
     @Path("")
-    fun create(restEntity: T): T
+    open fun create(restEntity: T) = restEntity.apply { repository.persist(this) }
 
     @PUT
     @Path("{id}")
-    fun update(@PathParam("id") id: Long, restEntity: T): T
+    abstract fun update(@PathParam("id") id: Long, restEntity: T): T
 
     @DELETE
     @Path("{id}")
-    fun delete(@PathParam("id") id: Long)
+    open fun delete(@PathParam("id") id: Long) = repository.delete(getById(id))
 }

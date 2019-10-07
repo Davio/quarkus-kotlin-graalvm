@@ -1,0 +1,7 @@
+dist: bionic
+language: java
+sudo: false
+jdk:
+  - openjdk8
+
+script: mvn compile quarkus:build && mvn -Pnative -Dnative-image.docker-build=true && docker-compose build app
