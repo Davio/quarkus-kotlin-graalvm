@@ -1,4 +1,9 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.0.0
+
+RUN microdnf update -y --nodocs \
+    && microdnf clean all  \
+    && rm -rf /var/cache/yum/*
+
 WORKDIR /work/
 COPY target/*-runner /work/application
 RUN chmod 775 /work
