@@ -24,11 +24,11 @@
         <!-- Plugin and Dependency Versions -->
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-        <quarkus.version>2.12.3.Final</quarkus.version>
+        <quarkus.version>2.13.0.Final</quarkus.version>
         <jackson.version>2.13.4</jackson.version>
         <postgresql.version>42.5.0</postgresql.version>
         <mockito.version>3.0.0</mockito.version>
-        <mockk.version>1.12.8</mockk.version>
+        <mockk.version>1.13.1</mockk.version>
         <kotest.version>5.4.2</kotest.version>
     </properties>
 
