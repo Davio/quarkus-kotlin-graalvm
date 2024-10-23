@@ -13,7 +13,7 @@
     <properties>
         <!-- Generic properties -->
         <java.version>17</java.version>
-        <kotlin.version>1.9.20</kotlin.version>
+        <kotlin.version>2.0.21</kotlin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -22,14 +22,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Plugin and Dependency Versions -->
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-        <quarkus.version>3.5.3</quarkus.version>
-        <jackson.version>2.16.0</jackson.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
+        <quarkus.version>3.16.0</quarkus.version>
+        <jackson.version>2.18.0</jackson.version>
         <postgresql.version>42.7.0</postgresql.version>
         <mockito.version>3.0.0</mockito.version>
-        <mockk.version>1.13.8</mockk.version>
-        <kotest.version>5.8.0</kotest.version>
+        <mockk.version>1.13.13</mockk.version>
+        <kotest.version>5.9.1</kotest.version>
     </properties>
 
     <dependencyManagement>
